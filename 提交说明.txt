@@ -1,0 +1,61 @@
+﻿# Git 提交步骤说明
+
+## 前置条件
+1. 安装 Git：https://git-scm.com/download/win
+2. 安装完成后，重新打开 PowerShell 或命令提示符
+
+## 提交步骤
+
+### 方法一：使用命令行
+
+1. 打开 PowerShell 或命令提示符
+
+2. 进入项目目录：
+   cd C:\Users\30248\Documents\GitHub\android_devic_eebbk_ums512_1h10
+
+3. 配置 Git（如果还没配置过）：
+   git config --global user.name "你的GitHub用户名"
+   git config --global user.email "你的GitHub邮箱"
+
+4. 查看修改的文件：
+   git status
+
+5. 添加所有修改：
+   git add .
+
+6. 提交更改：
+   git commit -m "修复 vendorsetup.sh 并添加 GitHub Actions 编译流程"
+
+7. 推送到 GitHub：
+   git push
+
+### 方法二：使用 GitHub Desktop
+
+1. 打开 GitHub Desktop
+2. 选择 "Add an Existing Repository from your Hard Drive"
+3. 选择项目目录：C:\Users\30248\Documents\GitHub\android_devic_eebbk_ums512_1h10
+4. 在左侧面板会看到修改的文件：
+   - vendorsetup.sh (已修复)
+   - .github/workflows/build.yml (新增)
+5. 在提交框中输入："修复 vendorsetup.sh 并添加 GitHub Actions 编译流程"
+6. 点击 "Commit to main" 或 "Commit to master"
+7. 点击 "Push origin" 推送到 GitHub
+
+## 提交后的操作
+
+1. 访问你的 GitHub 仓库
+2. 点击 "Actions" 标签页
+3. 查看 "Build TWRP for ums512_1h10" 工作流程的运行状态
+4. 等待编译完成（通常需要 30-60 分钟）
+5. 编译成功后，可以在工作流程页面下载 recovery 镜像
+
+## 常见问题
+
+### 如果推送时要求输入密码
+GitHub 已不再支持密码认证，需要使用 Personal Access Token：
+1. 访问 GitHub Settings -> Developer settings -> Personal access tokens -> Tokens (classic)
+2. 生成新的 token，勾选 repo 权限
+3. 使用 token 代替密码
+
+### 如果遇到权限错误
+确保你有该仓库的推送权限，或者 Fork 该仓库到你的账号下。

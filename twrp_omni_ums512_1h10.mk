@@ -16,7 +16,7 @@ $(call inherit-product, vendor/omni/config/common.mk)
 $(call inherit-product, device/eebbk/ums512_1h10/device.mk)
 
 PRODUCT_DEVICE := ums512_1h10
-PRODUCT_NAME := omni_ums512_1h10
+PRODUCT_NAME :=twrp_omni_ums512_1h10
 PRODUCT_BRAND := EEBBK
 PRODUCT_MODEL := X3
 PRODUCT_MANUFACTURER := eebbk

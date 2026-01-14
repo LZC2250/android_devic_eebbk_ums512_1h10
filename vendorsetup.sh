@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-add_lunch_combo omni_ums512_1h10-user
-add_lunch_combo omni_ums512_1h10-userdebug
-add_lunch_combo omni_ums512_1h10-eng
+# TWRP lunch options for ums512_1h10
+if [ -z "$TARGET_DEVICE" ]; then
+    export TARGET_DEVICE=ums512_1h10
+fi

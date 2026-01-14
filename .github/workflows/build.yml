@@ -1,0 +1,75 @@
+name: Build TWRP for ums512_1h10
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout device tree
+      uses: actions/checkout@v4
+      with:
+        path: device/eebbk/ums512_1h10
+
+    - name: Setup build environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip openjdk-11-jdk python3 python3-pip
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ runner.os }}-twrp
+
+    - name: Install repo tool
+      run: |
+        mkdir -p ~/bin
+        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+        chmod a+x ~/bin/repo
+        echo "$HOME/bin" >> $GITHUB_PATH
+
+    - name: Initialize repo
+      run: |
+        mkdir -p twrp
+        cd twrp
+        repo init -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1 --depth=1
+
+    - name: Sync sources
+      run: |
+        cd twrp
+        repo sync -j$(nproc --all) --force-sync --no-tags --no-clone-bundle
+
+    - name: Copy device tree
+      run: |
+        mkdir -p twrp/device/eebbk
+        cp -r device/eebbk/ums512_1h10 twrp/device/eebbk/
+
+    - name: Build TWRP
+      run: |
+        cd twrp
+        source build/envsetup.sh
+        export ALLOW_MISSING_DEPENDENCIES=true
+        lunch twrp_omni_ums512_1h10-eng
+        make clean
+        make recoveryimage -j$(nproc --all)
+
+    - name: Upload recovery image
+      uses: actions/upload-artifact@v4
+      with:
+        name: recovery-image
+        path: twrp/out/target/product/ums512_1h10/*.img
+        retention-days: 30
+
+    - name: Upload build log
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-log
+        path: twrp/out/target/product/ums512_1h10/*.log
+        retention-days: 7
