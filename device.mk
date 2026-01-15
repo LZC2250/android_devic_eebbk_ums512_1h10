@@ -5,4 +5,4 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-LOCAL_PATH := device/eebbk/ums512_1h10
+LOCAL_PATH := vendor/omni/config/common.mk
